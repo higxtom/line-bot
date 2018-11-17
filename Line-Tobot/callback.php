@@ -20,63 +20,51 @@ $bot = new LINEBot(new CurlHTTPClient(LINE_CHANNEL_TOKEN), ['channelSecret' => L
 
 $signature = $_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
 $contents = file_get_contents("php://input");
-// $json = json_decode($contents);
-// $event = $json->events[0]; 
+$json = json_decode($contents);
+$event = $json->events[0]; 
 
-try {
-    $events = $bot->parseEventRequest($contents, $signature);
+// Username
+$profile = $event['source'];
+$userid = $profile['userId'];        
+        
+$eventType = $event['type'];
+if ($eventType === "message") {
     
-    foreach ($events as $event) {        
-        // Username
-        $profile = ($bot->getProfile($event->source->userId));
-        if ($profile->isSucceeded()) {
-            $username = $profile->getJSONDecodedBody()['displayName'];
-        }
-        
-        
-        if ($event instanceof MessageEvent) {
-            // message event
-            if ($event instanceof TextMessage) {
-                $type = "Text";
-                continue;
-            } else if ($event instanceof StickerMessage) {
-                // sticker
-                $type = "Sticker";
-                continue;
-            } else if ($event instanceof LocationMessage) {
-                // location
-                $type = "Location";
-                continue;
-            } else if ($event instanceof ImageMessage) {
-                // image : unsupported yet now.
-                $type = "Image";
-                continue;
-            } else if ($event instanceof AudioMessage) {
-                // audio : unsupported yet now.
-                $type = "Audio";
-                continue;
-            } else if ($event instanceof VideoMessage) {
-                // video : unsupported yet now.
-                $type = "Video";
-                continue;
-            } else {
-                // unknown message
-                $type = "Unknown, but a kind of ";
-                error_log("Unsupoprted message event type.[" . $event->getMessageType() . "]");
-                continue;
-            }
-        } else if ($event instanceof PostbackEvent) {
-            // postback
-            $type = "Postback event";
-            continue;
-        } else {
-            // Unsupported event
-            error_log("Unsupported event type. [" . $event->getType() . "]");
-        }
-        
-        $bot->replyText($event->getReplyToken(), 'Hi, ' . $username . '. I got your ' . $type . 'message!');
-        
+    $message = $event['message'];
+    $msgType = $message['type'];
+    
+    // message event
+    switch ($msgType) {
+        case 'text':
+            $type = "Text";
+            break;
+        case 'sticker':
+            $type = "Sticker";
+            break;
+        case 'location':
+            $type = "Location";
+            break;
+        case 'image':
+            $type = "Image";
+            break;
+        case 'audio':
+            $type = "Audio";
+            break;
+        case 'video':
+            $type = "Video";
+            break;
+        default:
+            $type = "Unknown, but a kind of ";
+            error_log("Unsupoprted message event type.[" . $event->getMessageType() . "]");
     }
-} catch (Exception $e) {
-    error_log("Exception occurred on parsing events.");
+} else if ($eventType === "postback") {
+    // postback
+    $type = "Postback event";
+    continue;
+} else {
+    // Unsupported event
+    error_log("Unsupported event type. [" . $eventType . "]");
 }
+
+$bot->replyText($event->getReplyToken(), 'Hi, ' . $userid . '. I got your ' . $type . 'message!');
+        
