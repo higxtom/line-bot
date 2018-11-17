@@ -1,95 +1,82 @@
 <?php
+define("LINE_CHANNEL_SECRET", "");
+define("LINE_CHANNEL_TOKEN", "");
 
-/**
- * Copyright 2016 LINE Corporation
- *
- * LINE Corporation licenses this file to you under the Apache License,
- * version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at:
- *
- *   https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
+use LINE\LINEBot;
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot\Constant\HTTPHeader;
+use LINE\LINEBot\Event\PostbackEvent;
+use LINE\LINEBot\Event\MessageEvent;
+use LINE\LINEBot\Event\MessageEvent\TextMessage;
+use LINE\LINEBot\Event\MessageEvent\StickerMessage;
+use LINE\LINEBot\Event\MessageEvent\LocationMessage;
+use LINE\LINEBot\Event\MessageEvent\ImageMessage;
+use LINE\LINEBot\Event\MessageEvent\AudioMessage;
+use LINE\LINEBot\Event\MessageEvent\VideoMessage;
 
-require_once('./LINEBotTiny.php');
-require_once('./OpenWeather.php');
-require_once('./BarInfo.php');
+require('../vendor/autoload.php');
 
-$channelAccessToken = 'E3CZ8tmp8eBxSLJWGG19BbN2fluz1y+z0JaVaHHw4TbUQ8FQ/o7OhFlTL27vhEIzFIWcV08+dXFzWwCVoDBnGX5wL+i3zTWTti/ANAzy/uvp3LF0PNB/I3JXoGFUg/WcXeBh5/SOxolvxLp5i+x1DQdB04t89/1O/w1cDnyilFU=';
-$channelSecret = '57a930dda63276a1755a3eb12d039bf9';
+$bot = new LINEBot(new CurlHTTPClient(LINE_CHANNEL_TOKEN), ['channelSecret' => LINE_CHANNEL_SECRET,]);
 
-$client = new LINEBotTiny($channelAccessToken, $channelSecret);
-foreach ($client->parseEvents() as $event) {
-    switch ($event['type']) {
-        case 'message':
-            $message = $event['message'];
-            switch ($message['type']) {
-                case 'text':
-                    $input = strtolower(trim($message['text']));
-                    $title = "Sorry, your order doesn't work for me now.";
-                    $info = "Thanks anyway!";
-                    $st_pack = 11538;
-                    $sticker = 51626501;
+$signature = $_SERVER["HTTP_".\LINE\LINEBot\Constant\HTTPHeader::LINE_SIGNATURE];
+$contents = file_get_contents("php://input");
+// $json = json_decode($contents);
+// $event = $json->events[0]; 
 
-                    if (preg_match("/^bar:/", $input)) {
-                       $title = "Bar Information";
-                       $info = "";
-                       $st_pack = 4;
-                       $sticker = 300;
-
-                       $barlist = json_decode(getBarInfoByArea(ltrim($input, 'bar:')), true);
-                       foreach ($barlist as $bar) {
-                          $info .= $bar['name'];
-                          $info .= "("; 
-                          $info .= $bar['url']; 
-                          $info .= ")\n";
-                       }
-                    }
-                    $client->replyMessage(array(
-                        'replyToken' => $event['replyToken'],
-                        'messages' => array(
-                            array(
-                                'type' => 'sticker',
-                                'packageId' => $st_pack,
-                                'stickerId' => $sticker
-                            ),
-                            array(
-                                'type' => 'text',
-                                'text' => $title
-                            ),
-                            array(
-                                'type' => 'text',
-                                'text' => $info
-                            )
-                        )
-                    ));
-                    break;
-                case 'location':
-                    $owm_json = getWeatherForecast($message['latitude'], $message['longitude']);
-                    $owm_data = json_decode($owm_json, true);
-
-                    $client->replyMessage(array(
-                        'replyToken' => $event['replyToken'],
-                        'messages' => array(
-                            array(
-                                'type' => 'text',
-                                'text' => 'あなたがいる場所は、' . $owm_data['name'] . "で天気予報は" . $owm_data['weather'][0]['main'] . "です。"
-                            )
-                        )
-                   ));
-                   break;
-                default:
-                    error_log("Unsupporeted message type: " . $message['type']);
-                    break;
+try {
+    $events = $bot->parseEventRequest($contents, $signature);
+    
+    foreach ($events as $event) {        
+        // Username
+        $profile = ($bot->getProfile($event->source->userId));
+        if ($profile->isSucceeded()) {
+            $username = $profile->getJSONDecodedBody()['displayName'];
+        }
+        
+        
+        if ($event instanceof MessageEvent) {
+            // message event
+            if ($event instanceof TextMessage) {
+                $type = "Text";
+                continue;
+            } else if ($event instanceof StickerMessage) {
+                // sticker
+                $type = "Sticker";
+                continue;
+            } else if ($event instanceof LocationMessage) {
+                // location
+                $type = "Location";
+                continue;
+            } else if ($event instanceof ImageMessage) {
+                // image : unsupported yet now.
+                $type = "Image";
+                continue;
+            } else if ($event instanceof AudioMessage) {
+                // audio : unsupported yet now.
+                $type = "Audio";
+                continue;
+            } else if ($event instanceof VideoMessage) {
+                // video : unsupported yet now.
+                $type = "Video";
+                continue;
+            } else {
+                // unknown message
+                $type = "Unknown, but a kind of ";
+                error_log("Unsupoprted message event type.[" . $event->getMessageType() . "]");
+                continue;
             }
-            break;
-        default:
-            error_log("Unsupporeted event type: " . $event['type']);
-            break;
+        } else if ($event instanceof PostbackEvent) {
+            // postback
+            $type = "Postback event";
+            continue;
+        } else {
+            // Unsupported event
+            error_log("Unsupported event type. [" . $event->getType() . "]");
+        }
+        
+        $bot->replyText($event->getReplyToken(), 'Hi, ' . $username . '. I got your ' . $type . 'message!');
+        
     }
-};
+} catch (Exception $e) {
+    error_log("Exception occurred on parsing events.");
+}

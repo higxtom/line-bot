@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
-	<buildpathentry kind="src" path=""/>
+	<buildpathentry excluding="vendor/linecorp/line-bot-sdk/examples/|vendor/linecorp/line-bot-sdk/phpmd.xml|vendor/linecorp/line-bot-sdk/tests/|vendor/monolog/monolog/tests/|vendor/nikic/fast-route/test/|vendor/pimple/pimple/src/Pimple/Tests/|vendor/psr/log/Psr/Log/Test/" kind="src" path=""/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
 </buildpath>
