@@ -15,13 +15,11 @@ class TextMessageHandler implements EventHandler
 {
     private $bot;
 //     private $logger;
-    private $req;
     private $textMessage;
     
     public function __construct($bot, $req, TextMessage $textMessage)
     {
         $this->bot = $bot;
-        $this->req = $req;
         $this->textMessage = $textMessage;
     }
 

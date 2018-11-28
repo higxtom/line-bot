@@ -17,6 +17,7 @@ use LINE\LINEBot\Event\MessageEvent\AudioMessage;
 use LINE\LINEBot\Event\MessageEvent\VideoMessage;
 use \LINE\LINEBot\Exception\InvalidSignatureException;
 use \LINE\LINEBot\Exception\InvalidEventRequestException;
+use \TextMessageHandler;
 
 $bot = new LINEBot(new CurlHTTPClient(LINE_CHANNEL_TOKEN), ['channelSecret' => LINE_CHANNEL_SECRET,]);
 
@@ -52,6 +53,15 @@ foreach ($events as $event) {
         switch ($msgType) {
             case 'text':
                 $type = "Text";
+                $hTextMessage = new TextMessageHandler($bot, $event);
+                $hTextMessage->handle();
+                /*
+                $message = $event['message'];
+                $bot.gettext($message);
+                $pdo = new PDO('mysql:host=localhost;dbname=linebot;charset=utf8', 'tobot', 'P@ssw0rd');
+                $sql = "select * from bar where area like '%" . $msgText . "%'";
+                $pstmt = $pdo->prepare($sql);
+                */
                 break;
             case 'sticker':
                 $type = "Sticker";

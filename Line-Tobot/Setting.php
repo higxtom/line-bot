@@ -8,7 +8,7 @@ class Setting
             'displayErrorDetails' => true,
             'logger' => [
                 'name' => 'line-tobot',
-                'path' => __DIR__ . "../logs/app.log",
+                'path' => __DIR__ . "../logs/line-bot.log",
             ],
             'bot' => [
                 'channelToken' => getenv('LINEBOT_CHANNEL_TOKEN') ?: 'E3CZ8tmp8eBxSLJWGG19BbN2fluz1y+z0JaVaHHw4TbUQ8FQ/o7OhFlTL27vhEIzFIWcV08+dXFzWwCVoDBnGX5wL+i3zTWTti/ANAzy/uvp3LF0PNB/I3JXoGFUg/WcXeBh5/SOxolvxLp5i+x1DQdB04t89/1O/w1cDnyilFU=',
