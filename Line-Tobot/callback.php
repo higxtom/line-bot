@@ -3,6 +3,9 @@ define("LINE_CHANNEL_SECRET", "57a930dda63276a1755a3eb12d039bf9");
 define("LINE_CHANNEL_TOKEN", "E3CZ8tmp8eBxSLJWGG19BbN2fluz1y+z0JaVaHHw4TbUQ8FQ/o7OhFlTL27vhEIzFIWcV08+dXFzWwCVoDBnGX5wL+i3zTWTti/ANAzy/uvp3LF0PNB/I3JXoGFUg/WcXeBh5/SOxolvxLp5i+x1DQdB04t89/1O/w1cDnyilFU=");
 
 require('../vendor/autoload.php');
+require('./EventHandler.php');
+require('./EventHandler/MessageHandler/TextMessageHandler.php');
+require('./EventHandler/MessageHandler/LocationMessageHandler.php');
 
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -17,7 +20,6 @@ use LINE\LINEBot\Event\MessageEvent\AudioMessage;
 use LINE\LINEBot\Event\MessageEvent\VideoMessage;
 use \LINE\LINEBot\Exception\InvalidSignatureException;
 use \LINE\LINEBot\Exception\InvalidEventRequestException;
-use \TextMessageHandler;
 
 $bot = new LINEBot(new CurlHTTPClient(LINE_CHANNEL_TOKEN), ['channelSecret' => LINE_CHANNEL_SECRET,]);
 
@@ -53,21 +55,16 @@ foreach ($events as $event) {
         switch ($msgType) {
             case 'text':
                 $type = "Text";
-                $hTextMessage = new TextMessageHandler($bot, $event);
-                $hTextMessage->handle();
-                /*
-                $message = $event['message'];
-                $bot.gettext($message);
-                $pdo = new PDO('mysql:host=localhost;dbname=linebot;charset=utf8', 'tobot', 'P@ssw0rd');
-                $sql = "select * from bar where area like '%" . $msgText . "%'";
-                $pstmt = $pdo->prepare($sql);
-                */
+                $handler = new TextMessageHandler($bot, $event);
+                $handler->handle();
                 break;
             case 'sticker':
                 $type = "Sticker";
                 break;
             case 'location':
                 $type = "Location";
+                $handler = new LocationMessageHandler($bot, $event);
+                $handler->hanlde();
                 break;
             case 'image':
                 $type = "Image";

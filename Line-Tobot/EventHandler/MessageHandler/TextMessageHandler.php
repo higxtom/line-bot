@@ -17,7 +17,7 @@ class TextMessageHandler implements EventHandler
 //     private $logger;
     private $textMessage;
     
-    public function __construct($bot, $req, TextMessage $textMessage)
+    public function __construct($bot, TextMessage $textMessage)
     {
         $this->bot = $bot;
         $this->textMessage = $textMessage;
@@ -53,6 +53,14 @@ class TextMessageHandler implements EventHandler
                 ]);
                 $messageTemplate = new TextMessageBuilder('Where are you?', $quickReply);
                 $this->bot->replyMessage($replyToken, $messageTemplate);break;
+                /*
+                 $message = $event['message'];
+                 $bot.gettext($message);
+                 $pdo = new PDO('mysql:host=localhost;dbname=linebot;charset=utf8', 'tobot', 'P@ssw0rd');
+                 $sql = "select * from bar where area like '%" . $msgText . "%'";
+                 $pstmt = $pdo->prepare($sql);
+                 */
+                
             default:
                 error_log("Unsupported event." . $text);
                 
