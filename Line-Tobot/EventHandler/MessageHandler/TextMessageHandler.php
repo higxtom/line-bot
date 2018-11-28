@@ -39,7 +39,7 @@ class TextMessageHandler implements EventHandler
                 $prev_command = $result['command'];
                 error_log($prev_command);
             }
-            error_log("db access succeeded.")
+            error_log("db access succeeded.");
         } catch(PDOException $e) {
             error_log('Error has occurred on accesing database' . $e->getMessage());
         }
