@@ -32,13 +32,14 @@ class TextMessageHandler implements EventHandler
         try {
             $pdo = new PDO('mysql:host=localhost;dbname=linebot;charset=utf8', 'tobot', 'P@ssw0rd');
             // Get last command
-            $sql = "select command from request_hist where userId = :userId order by last_update desc";
+            $sql = "select command from request_hist where userId = ? order by last_update desc";
             $pstmt = $pdo->prepare($sql);
             $pstmt->execute(array($userid));
             while ($result = $pstmt->fetch(PDO::FETCH_ASSOC)) {
                 $prev_command = $result['command'];
-                print $prev_command;
+                error_log($prev_command);
             }
+            error_log("db access succeeded.")
         } catch(PDOException $e) {
             error_log('Error has occurred on accesing database' . $e->getMessage());
         }
