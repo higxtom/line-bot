@@ -2,6 +2,7 @@
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 class LocationMessageHandler implements EventHandler
 {
@@ -22,9 +23,12 @@ class LocationMessageHandler implements EventHandler
         $latitude = $this->locationMessage->getLatitude();
         $longitude = $this->locationMessage->getLongitude();
         
+        $rmsg = "You are at '" . $title . "', right, and the place address is " . $address . ", and the cordinates is " . $latitude . ":" . $longitude;
+        
         $this->bot->replyMessage(
             $replyToken,
-            new LocationMessageBuilder($title, $address, $latitude, $longitude)
+            new TextMessageBuilder($rmsg)
+//             new LocationMessageBuilder($title, $address, $latitude, $longitude)
         );
     }
 }

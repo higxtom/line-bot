@@ -64,7 +64,7 @@ foreach ($events as $event) {
             case 'location':
                 $type = "Location";
                 $handler = new LocationMessageHandler($bot, $event);
-                $handler->hanlde();
+                $handler->handle();
                 break;
             case 'image':
                 $type = "Image";
