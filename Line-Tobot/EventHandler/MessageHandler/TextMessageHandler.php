@@ -28,9 +28,23 @@ class TextMessageHandler implements EventHandler
         $text = $this->textMessage->getText();
         $replyToken = $this->textMessage->getReplyToken();
 
+        $userid = $this->textMessage->getUserId();
+        try {
+            $pdo = new PDO('mysql:host=localhost;dbname=linebot;charset=utf8', 'tobot', 'P@ssw0rd');
+            // Get last command
+            $sql = "select command from request_hist where userId = :userId order by last_update desc";
+            $pstmt = $pdo->prepare($sql);
+            $pstmt->execute(array($userid));
+            while ($result = $pstmt->fetch(PDO::FETCH_ASSOC)) {
+                $prev_command = $result['command'];
+                print $prev_command;
+            }
+        } catch(PDOException $e) {
+            error_log('Error has occurred on accesing database' . $e->getMessage());
+        }
+        
         switch ($text) {
             case 'profile':
-                $userid = $this->textMessage->getUserId();
                 $this->sentProfile($replyToken, $userid);
                 break;
             case 'language':
@@ -53,13 +67,6 @@ class TextMessageHandler implements EventHandler
                 ]);
                 $messageTemplate = new TextMessageBuilder('Where are you?', $quickReply);
                 $this->bot->replyMessage($replyToken, $messageTemplate);break;
-                /*
-                 $message = $event['message'];
-                 $bot.gettext($message);
-                 $pdo = new PDO('mysql:host=localhost;dbname=linebot;charset=utf8', 'tobot', 'P@ssw0rd');
-                 $sql = "select * from bar where area like '%" . $msgText . "%'";
-                 $pstmt = $pdo->prepare($sql);
-                 */
                 
             default:
                 error_log("Unsupported event." . $text);

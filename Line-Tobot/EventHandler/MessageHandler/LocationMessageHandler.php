@@ -23,7 +23,7 @@ class LocationMessageHandler implements EventHandler
         $latitude = $this->locationMessage->getLatitude();
         $longitude = $this->locationMessage->getLongitude();
         
-        $rmsg = "You are at '" . $title . "', right, and the place address is " . $address . ", and the cordinates is " . $latitude . ":" . $longitude;
+        $rmsg = "the place you are now is " . $address . ", and the cordinates is " . $latitude . ":" . $longitude;
         error_log($rmsg);
         
         $this->bot->replyMessage(
