@@ -1,5 +1,5 @@
 <?php
-require('../../OpenWeather.php');
+require(dirnae(__FILE__)."/../../OpenWeather.php");
 
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
