@@ -1,5 +1,5 @@
 <?php
-require_once('../../OpenWeather.php');
+require('../../OpenWeather.php');
 
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
@@ -25,12 +25,12 @@ class LocationMessageHandler implements EventHandler
         $latitude = $this->locationMessage->getLatitude();
         $longitude = $this->locationMessage->getLongitude();
         
-        $rmsg = "the place you are now is " . $address . ", and the cordinates is " . $latitude . ":" . $longitude;
-        error_log($rmsg);
-        
         $owm_json = getWeatherForecast($latitude, $longitude);
         $owm_data = json_decode($owm_json, true);
         error_log($owm_data);
+        
+        $rmsg = "You are at" . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $own_data['weather'][0]['description'];
+        error_log($rmsg);
         
         $this->bot->replyMessage(
             $replyToken,
