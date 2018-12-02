@@ -25,8 +25,9 @@ class linebotDAO
             error_log("db access succeeded.");
         } catch(PDOException $e) {
             error_log('Error has occurred on accesing database' . $e->getMessage());
-        }
-        
+        }   
     }
+    
+    
 }
 
