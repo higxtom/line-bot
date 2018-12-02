@@ -45,8 +45,8 @@ class LinebotDAO
         $lon_e = $longitude + $range;
         
         error_log("SQL: ". $sql);
-        error_log("LAT:" . $lat_s . " - " . $lat_e);
-        error_log("LON:" . $lon_s . " - " . $lon_e);
+        error_log("LAT:" . $lat_s . " - " . $latitude . " - " . $lat_e);
+        error_log("LON:" . $lon_s . " - " . $longitude . " - " . $lon_e);
         
         try {
             $pstmt = $this->pdo->prepare($sql);
