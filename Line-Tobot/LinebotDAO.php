@@ -33,10 +33,10 @@ class LinebotDAO
     public function findStationsByCoordinates($latitude, $longitude, $range) {
         // 検索SQL 緯度経度を条件に駅名、路線名、駅の緯度と経度を取得する
         $sql = "select s.station_name, l.line_name, s.logitude, s.latitude";
-        $sql += " from station s, line l";
-        $sql += " where s.railline_cd = l.line_cd";
-        $sql += " and latitude between ? and ?";
-        $sql += " and longitude between ? and ?";
+        $sql .= " from station s, line l";
+        $sql .= " where s.railline_cd = l.line_cd";
+        $sql .= " and latitude between ? and ?";
+        $sql .= " and longitude between ? and ?";
         
         // 検索条件の緯度・経度の計算（引数で受け取った検索範囲を条件にする）
         $lat_s = $latitude - $range;
