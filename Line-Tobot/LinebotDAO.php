@@ -44,15 +44,22 @@ class LinebotDAO
         $lon_s = $longitude - $range;
         $lon_e = $longitude + $range;
         
+        error_log("SQL: ". $sql);
+        error_log("LAT:" . $lat_s . " - " . $lat_e);
+        error_log("LON:" . $lon_s . " - " . $lon_e);
+        
         try {
             $pstmt = $this->pdo->prepare($sql);
             $pstmt->execute(array($lon_s, $lon_e, $lat_s, $lat_e));
-            if ( $pstmt->rowCount() > 0 ) {
+            
+            error_log("RS: " . $pstmt->rowCount());
+//            if ( $pstmt->rowCount() > 0 ) {
                 $stt_list = json_encode($pstmt->fetchAll(PDO::FETCH_ASSOC));
-            } else {
-                error_log("got no record.Check DB record or sql condition.");
-                $stt_list = null;
-            }
+                error_log($stt_list);
+//            } else {
+//                error_log("got no record.Check DB record or sql condition.");
+//                $stt_list = null;
+//            }
             return $stt_list;
         } catch (PDOException $e) {
             error_log('Error has occurred on accesing Station'.$e->getMessage());

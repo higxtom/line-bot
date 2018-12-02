@@ -39,7 +39,7 @@ class LocationMessageHandler implements EventHandler
         $stations = $this->dao->findStationsByCoordinates($latitude, $longitude, STATION_SEARCH_RANGE);
         error_log($stations);
         
-        $rmsg = "You are at" . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
+        $rmsg = "You are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
         error_log($rmsg);
         
         $this->bot->replyMessage(
