@@ -32,11 +32,11 @@ class LinebotDAO
     // 駅データDBを緯度・経度から取得し、JSON形式で結果を返す。
     public function findStationsByCoordinates($latitude, $longitude, $range) {
         // 検索SQL 緯度経度を条件に駅名、路線名、駅の緯度と経度を取得する
-        $sql = "select s.station_name, l.line_name, s.logitude, s.latitude";
+        $sql = "select s.station_name, l.line_name, s.longitude, s.latitude";
         $sql .= " from station s, line l";
         $sql .= " where s.railline_cd = l.line_cd";
-        $sql .= " and latitude between ? and ?";
-        $sql .= " and longitude between ? and ?";
+        $sql .= " and s.latitude between ? and ?";
+        $sql .= " and s.longitude between ? and ?";
         
         // 検索条件の緯度・経度の計算（引数で受け取った検索範囲を条件にする）
         $lat_s = $latitude - $range;
@@ -50,7 +50,7 @@ class LinebotDAO
         
         try {
             $pstmt = $this->pdo->prepare($sql);
-            $pstmt->execute(array($lon_s, $lon_e, $lat_s, $lat_e));
+            $pstmt->execute(array($lat_s, $lat_e, $lon_s, $lon_e));
             
             error_log("RS: " . $pstmt->rowCount());
 //            if ( $pstmt->rowCount() > 0 ) {
