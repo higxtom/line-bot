@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__).'/../../utils/OpenWeather.php');
 require_once(dirname(__FILE__).'/../../LinebotDAO.php');
+require_once(dirname(__FILE__).'/../../StationData.php');
 
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
