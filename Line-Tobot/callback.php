@@ -2,10 +2,11 @@
 define("LINE_CHANNEL_SECRET", "57a930dda63276a1755a3eb12d039bf9");
 define("LINE_CHANNEL_TOKEN", "E3CZ8tmp8eBxSLJWGG19BbN2fluz1y+z0JaVaHHw4TbUQ8FQ/o7OhFlTL27vhEIzFIWcV08+dXFzWwCVoDBnGX5wL+i3zTWTti/ANAzy/uvp3LF0PNB/I3JXoGFUg/WcXeBh5/SOxolvxLp5i+x1DQdB04t89/1O/w1cDnyilFU=");
 
-require('../vendor/autoload.php');
-require('./EventHandler.php');
-require('./EventHandler/MessageHandler/TextMessageHandler.php');
-require('./EventHandler/MessageHandler/LocationMessageHandler.php');
+require(dirname(__FILE__).'/../vendor/autoload.php');
+require(dirname(__FILE__).'/EventHandler.php');
+require(dirname(__FILE__).'/EventHandler/MessageHandler/TextMessageHandler.php');
+require(dirname(__FILE__).'/EventHandler/MessageHandler/LocationMessageHandler.php');
+require(dirname(__FILE__).'/LinebotDAO.php');
 
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -34,6 +35,8 @@ try {
 } catch (InvalidEventRequestException $e) {
     error_log("Exception orrured on parseEventRequest." . $e->getMessage());
 }
+
+$dao = new LinebotDAO('localhost', 'linebot', 'tobot', 'P@ssw0rd');
 
 // $json = json_decode($body);
 // $event = $json->events[0];
