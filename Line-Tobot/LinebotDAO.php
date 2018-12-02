@@ -53,13 +53,13 @@ class LinebotDAO
             $pstmt->execute(array($lat_s, $lat_e, $lon_s, $lon_e));
             
             error_log("RS: " . $pstmt->rowCount());
-//            if ( $pstmt->rowCount() > 0 ) {
+            if ( $pstmt->rowCount() > 0 ) {
                 $stt_list = json_encode($pstmt->fetchAll(PDO::FETCH_ASSOC));
-                error_log($stt_list);
-//            } else {
-//                error_log("got no record.Check DB record or sql condition.");
-//                $stt_list = null;
-//            }
+//                 error_log($stt_list);
+            } else {
+                error_log("got no record.Check DB record or sql condition.");
+                $stt_list = null;
+            }
             return $stt_list;
         } catch (PDOException $e) {
             error_log('Error has occurred on accesing Station'.$e->getMessage());
