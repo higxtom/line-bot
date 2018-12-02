@@ -36,8 +36,9 @@ class LocationMessageHandler implements EventHandler
         $owm_data = json_decode($owm_json, true);
         //error_log($owm_data);
         
-        $stations = $this->dao->findStationsByCoordinates($latitude, $longitude, STATION_SEARCH_RANGE);
-        error_log($stations);
+        $candidates = $this->dao->findStationsByCoordinates($latitude, $longitude, STATION_SEARCH_RANGE);
+        //error_log($candidates);
+        $stations = getNearestStations($latitude, $longitude, $stations, 500);
         
         $rmsg = "You are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
         error_log($rmsg);
