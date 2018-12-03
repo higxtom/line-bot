@@ -4,13 +4,18 @@ define('CIRCUMFERENCE_OF_EARTH',6378150);
 
 function getNearestStations($latitude, $longitude, $station_list, $distance) {
     $stations = json_decode($station_list);
-    error_log("XXX: " . $stations[0]['station_name']);
+    
+    $list = array();
     
     foreach ($stations as $station) {
-        error_log($station);
-        $dist = calcDistance($latitude, $longitude, $station['latitude'], $station['longitude']);
-        error_log($station['station_name'] . " : " . $dist);
+        $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
+        if ($dist < $distance) {
+            $near_station = array($station->station_name, $station.line_name, $dist);
+            array_push($list, $near_station);
+            error_log($station->station_name . " : " . $dist);
+        }
     }
+    return json_encode($list);
 }
 
 // 緯度経度から２点間の距離を算出する。
