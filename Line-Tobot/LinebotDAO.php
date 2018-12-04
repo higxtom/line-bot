@@ -18,7 +18,7 @@ class LinebotDAO
         $sql .= " on duplicate key update command = :command";
         
         try {
-            $pstmt = $this->dao->prepare($sql);
+            $pstmt = $this->pdo->prepare($sql);
             $pstmt->bindParam(':userid', $userid, PDO::PARAM_STR);
             $pstmt->bindParam(':command', $command, PDO::PARAM_STR);
             $pstmt->execute();
