@@ -4,24 +4,24 @@ define('CIRCUMFERENCE_OF_EARTH',6378150);
 
 function getNearestStations($latitude, $longitude, $station_list) {
     $stations = json_decode($station_list);
-    $station = array("指定範囲には駅がありませんでした。", "", 0 );
+    $nearest = array("指定範囲には駅がありませんでした。", "", 0 );
     
     $prev_dist = 10000; // 10000m = 10km
     foreach ($stations as $station) {
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
         error_log(number_format($prev_dist,0) . " <-> " . number_format($dist));
         if ($dist < $prev_dist) {
-            $station = array($station->station_name, $station->line_name, $dist);
+            $nearest = array($station->station_name, $station->line_name, $dist);
             error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
             $prev_dist = $dist;
         }
         error_log("<pre> : " . $prev_dist);
     }
-    if ($staion[2] === 0) {
-        $station = array("少なくとも10km以内には駅がありませんでした。", "", 0 );
+    if ($nearest[2] === 0) {
+        $nearest = array("少なくとも10km以内には駅がありませんでした。", "", 0 );
         error_log("少なくとも10km以内には、駅がありませんでした。");
     }
-    return json_encode($station);
+    return json_encode($nearest);
 }
 
 function getStationsInRange($latitude, $longitude, $station_list, $distance) {
