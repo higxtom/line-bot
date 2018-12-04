@@ -11,14 +11,14 @@ function getNearestStations($latitude, $longitude, $station_list) {
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
         error_log(number_format($prev_dist,0) . " <-> " . number_format($dist));
         if ($dist < $prev_dist) {
-            $nearest = array($station->station_name, $station->line_name, $dist);
+            $nearest = array($station->station_name, $station->line_name, $station->latitude, $station->longitude, $dist);
             error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
             $prev_dist = $dist;
         }
         error_log("<pre> : " . $prev_dist);
     }
     if ($nearest[2] === 0) {
-        $nearest = array("少なくとも10km以内には駅がありませんでした。", "", 0 );
+        $nearest = array("少なくとも10km以内には駅がありませんでした。", "", 0, 0, 0 );
         error_log("少なくとも10km以内には、駅がありませんでした。");
     }
     return json_encode($nearest);
