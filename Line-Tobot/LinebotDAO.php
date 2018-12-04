@@ -29,6 +29,8 @@ class LinebotDAO
     }
     
     public function findPrevCommandByUserId($userid) {
+        
+        error_log("USERID:".$userid);
         $sql = "select command, last_update from request_hist where user_id = :userid";
         try {
             // Get last command
