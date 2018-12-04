@@ -9,7 +9,7 @@ function getNearestStations($latitude, $longitude, $station_list) {
     $prev_dist = 10000; // 10000m = 10km
     foreach ($stations as $station) {
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
-        error_log(number_format($prev_dist,0) . " <-> " . number_format($dist));
+//         error_log(number_format($prev_dist,0) . " <-> " . number_format($dist));
         if ($dist < $prev_dist) {
             $nearest = array($station->station_name, $station->line_name, $station->latitude, $station->longitude, $dist);
             error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
