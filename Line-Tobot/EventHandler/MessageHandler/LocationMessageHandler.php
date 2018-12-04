@@ -42,8 +42,12 @@ class LocationMessageHandler implements EventHandler
         // 500 -> 1000 -> 1500
         $stations = getNearestStations($latitude, $longitude, $candidates, 1500);
         errorlog($stations);
+        $rmsg = "Near stations where you are.<br>";
+        foreach ($stations as $station) {
+            $rmsg .= $station->station_name . "(" . $station->line_name . ")" . ":" . number_format($station->dist,0) . "m¥n";
+        }
         
-        $rmsg = "You are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
+        $rmsg .= "You are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
         error_log($rmsg);
         
         $this->bot->replyMessage(

@@ -4,14 +4,13 @@ define('CIRCUMFERENCE_OF_EARTH',6378150);
 
 function getNearestStations($latitude, $longitude, $station_list, $distance) {
     $stations = json_decode($station_list);
-    
     $list = array();
     
     foreach ($stations as $station) {
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
         if ($dist < $distance) {
-            array_push($list, array($station->station_name, $station.line_name, $dist));
-            error_log($station->station_name . " : " . $dist);
+            array_push($list, array($station->station_name, $station->line_name, $dist));
+            error_log($station->station_name . " : " . number_format($dist, 3));
         }
     }
     return json_encode($list);
