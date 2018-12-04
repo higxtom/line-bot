@@ -45,7 +45,7 @@ class LocationMessageHandler implements EventHandler
         $rmsg = "Near stations where you are.";
         foreach ($stations as $station) {
             error_log(print_r($station, true));
-            $rmsg .= $station[0] . "(" . $station[1] . ")" . ":" . number_format($station[2],0) . "m";
+            $rmsg .= $station[0] . "(" . $station[1] . "): " . number_format($station[2],0) . "m";
         }
         
         $rmsg .= "You are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
