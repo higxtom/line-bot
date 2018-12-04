@@ -3,7 +3,7 @@
 define('CIRCUMFERENCE_OF_EARTH',6378150);
 
 function getNearestStations($latitude, $longitude, $station_list, $distance) {
-    $stations = json_decode($station_list);
+    $stations = json_decode($station_list, true);
     $list = array();
     
     foreach ($stations as $station) {
@@ -13,7 +13,7 @@ function getNearestStations($latitude, $longitude, $station_list, $distance) {
             error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
         }
     }
-    if (count($list)) {
+    if (count($list) === 0) {
         error_log("指定された範囲には、駅がありませんでした。");
     }
     return json_encode($list);

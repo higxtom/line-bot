@@ -41,10 +41,10 @@ class LocationMessageHandler implements EventHandler
         //error_log($candidates);
         // 500 -> 1000 -> 1500
         $stations = json_decode(getNearestStations($latitude, $longitude, $candidates, 500), true);
-        error_log($stations);
+//         error_log($stations);
         $rmsg = "Near stations where you are.";
         foreach ($stations as $station) {
-            $rmsg .= $station->station_name . "(" . $station->line_name . ")" . ":" . number_format($station->dist,0) . "m";
+            $rmsg .= $station['station_name'] . "(" . $station['line_name'] . ")" . ":" . number_format($station-['dist'],0) . "m";
         }
         
         $rmsg .= "You are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
