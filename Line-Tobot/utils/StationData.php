@@ -6,8 +6,8 @@ function getNearestStations($latitude, $longitude, $station_list) {
     $stations = json_decode($station_list);
     $station = array("指定範囲には駅がありませんでした。", "", 0 );
     
+    $prev_dist = 10000; // 10000m = 10km
     foreach ($stations as $station) {
-        $prev_dist = 10000; // 10000m = 10km
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
         error_log(number_format($prev_dist,0) . " <-> " . number_format($dist));
         if ($dist < $prev_dist) {
