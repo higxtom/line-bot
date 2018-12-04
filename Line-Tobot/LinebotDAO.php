@@ -31,7 +31,7 @@ class LinebotDAO
     public function findPrevCommandByUserId($userid) {
         
         error_log("USERID:".$userid);
-        $sql = "select command, last_update from request_hist where user_id = :userid";
+        $sql = "select command, received_time from request_hist where user_id = :userid";
         try {
             // Get last command
             $pstmt = $this->pdo->prepare($sql);
