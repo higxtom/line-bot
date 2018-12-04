@@ -41,7 +41,7 @@ class LocationMessageHandler implements EventHandler
         //error_log($candidates);
         // 500 -> 1000 -> 1500
         $stations = getNearestStations($latitude, $longitude, $candidates, 1500);
-        errorlog($stations);
+        error_log($stations);
         $rmsg = "Near stations where you are.<br>";
         foreach ($stations as $station) {
             $rmsg .= $station->station_name . "(" . $station->line_name . ")" . ":" . number_format($station->dist,0) . "m¥n";
