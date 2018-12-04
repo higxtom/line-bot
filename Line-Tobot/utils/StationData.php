@@ -7,7 +7,7 @@ function getNearestStations($latitude, $longitude, $station_list, $distance) {
     $list = array();
     
     if (count($stations) === 0) {
-        array_push($list, array("指定範囲には駅がありませんでした。", "範囲:".$distance, 0 ));
+        array_push($list, array("指定範囲には駅がありませんでした。", "範囲:".$distance."m", 0 ));
         error_log("指定された範囲には、駅がありませんでした。");
     } else {
         foreach ($stations as $station) {
@@ -18,7 +18,7 @@ function getNearestStations($latitude, $longitude, $station_list, $distance) {
             }
         }
         if (count($list) === 0) {
-            array_push($list, array("指定範囲には駅がありませんでした。", "範囲:".$distance, 0 ));
+            array_push($list, array("指定範囲には駅がありませんでした。", "範囲:".$distance."m", 0 ));
             error_log("指定された範囲には、駅がありませんでした。");
         }
     }
