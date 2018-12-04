@@ -36,34 +36,41 @@ class LocationMessageHandler implements EventHandler
         $prev_cmd = $this->dao->findPrevCommandByUserId($this->locationMessage->getUserId());
         error_log("Previous command is : " . $prev_cmd);
         
-        $owm_json = getWeatherForecast($latitude, $longitude);
-        $owm_data = json_decode($owm_json, true);
-        //error_log($owm_data);
-        
-        $candidates = $this->dao->findStationsByCoordinates($latitude, $longitude, STATION_SEARCH_RANGE);
-        //error_log($candidates);
-        $nearest = json_decode(getNearestStations($latitude, $longitude, $candidates));
-        if ( $nearest[4] === 0 ) {
-            $rmsg = $nearest[0];
-        } else {
-            $rmsg = "The nearest station is " . $nearest[0] ."(" .$nearest[1] ."): " . number_format($nearest[4],0) ."m\\\n\\\n";
+        switch ($prev_cmd) {
+            case 'bar':
+                $this->bot->replyMessage($replyToken, new TextMessageBuilder("I will find bars that are near your place."));
+                break;
+            case 'weather':
+                $owm_json = getWeatherForecast($latitude, $longitude);
+                $owm_data = json_decode($owm_json, true);
+                //error_log($owm_data);
+                $rmsg = "\\\nYou are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
+//                 error_log($rmsg);
+                $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
+                break;
+            case 'station':
+                $candidates = $this->dao->findStationsByCoordinates($latitude, $longitude, STATION_SEARCH_RANGE);
+                //error_log($candidates);
+                $nearest = json_decode(getNearestStations($latitude, $longitude, $candidates));
+                if ( $nearest[4] === 0 ) {
+                    $rmsg = $nearest[0];
+                } else {
+                    $rmsg = "The nearest station is " . $nearest[0] ."(" .$nearest[1] ."): " . number_format($nearest[4],0) ."m\\\n\\\n";
+                }
+                $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
+                $this->bot->replyMessage($replyToken, new LocationMessageBuilder($nearest[0], "", $nearest[3], $nearest[4]));
+                
+                // 500 -> 1000 -> 1500
+                $stations = json_decode(getStationsInRange($latitude, $longitude, $candidates, 500), true);
+                error_log(print_r($stations,true));
+                $rmsg = "Stations which are near from you are \\\n";
+                foreach ($stations as $station) {
+                    error_log(print_r($station, true));
+                    $rmsg .= $station[0] . "(" . $station[1] . "): " . number_format($station[2],0) . "m\\\n";
+                }
+                $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));break;
+            default:
+                error_log("Unsupported command yet.");
         }
-        $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
-        $this->bot->replyMessage($replyToken, new LocationMessageBuilder($nearest[0], "", $nearest[3], $nearest[4]));
-        
-        // 500 -> 1000 -> 1500
-        $stations = json_decode(getStationsInRange($latitude, $longitude, $candidates, 500), true);
-        error_log(print_r($stations,true));
-        $rmsg = "Stations which are near from you are \\\n";
-        foreach ($stations as $station) {
-            error_log(print_r($station, true));
-            $rmsg .= $station[0] . "(" . $station[1] . "): " . number_format($station[2],0) . "m\\\n";
-        }
-        $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
-        
-        $rmsg = "\\\nYou are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
-        error_log($rmsg);
-        
-        $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
     }
 }
