@@ -37,6 +37,7 @@ class LinebotDAO
             $pstmt = $this->pdo->prepare($sql);
             $pstmt->bindParam(':userid', $userid, PDO::PARAM_STR);
             $pstmt->execute();
+            error_log("QUERY_RESULT:" . $pstmt->rowCount());
             while ($result = $pstmt->fetch(PDO::FETCH_ASSOC)) {
                 $prev_command = $result['command'];
                 error_log($prev_command);
