@@ -35,7 +35,7 @@ class LinebotDAO
         try {
             // Get last command
             $pstmt = $this->pdo->prepare($sql);
-            $pstmt->bindParam(':userid', $userid);
+            $pstmt->bindParam(':userid', $userid, PDO::PARAM_STR);
             $pstmt->execute();
             while ($result = $pstmt->fetch(PDO::FETCH_ASSOC)) {
                 $prev_command = $result['command'];
