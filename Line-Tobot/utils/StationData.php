@@ -6,16 +6,17 @@ function getNearestStations($latitude, $longitude, $station_list, $distance) {
     $stations = json_decode($station_list);
     $list = array();
     
-    foreach ($stations as $station) {
-        $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
-        if ($dist < $distance) {
-            array_push($list, array($station->station_name, $station->line_name, $dist));
-            error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
-        }
-    }
     if (count($list) === 0) {
-        array_push($list, array("指定範囲には駅がありませんでした。", "範囲".$distance, 0 ));
+        array_push($list, array("指定範囲には駅がありませんでした。", "範囲:".$distance, 0 ));
         error_log("指定された範囲には、駅がありませんでした。");
+    } else {
+        foreach ($stations as $station) {
+            $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
+            if ($dist < $distance) {
+                array_push($list, array($station->station_name, $station->line_name, $dist));
+                error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
+            }
+        }
     }
     return json_encode($list);
 }
