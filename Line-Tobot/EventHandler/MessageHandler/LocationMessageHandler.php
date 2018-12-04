@@ -40,9 +40,9 @@ class LocationMessageHandler implements EventHandler
         $candidates = $this->dao->findStationsByCoordinates($latitude, $longitude, STATION_SEARCH_RANGE);
         //error_log($candidates);
         // 500 -> 1000 -> 1500
-        $stations = getNearestStations($latitude, $longitude, $candidates, 1500);
+        $stations = json_decode(getNearestStations($latitude, $longitude, $candidates, 1500));
         error_log($stations);
-        $rmsg = "Near stations where you are.<br>";
+        $rmsg = "Near stations where you are.¥n";
         foreach ($stations as $station) {
             $rmsg .= $station->station_name . "(" . $station->line_name . ")" . ":" . number_format($station->dist,0) . "m¥n";
         }
