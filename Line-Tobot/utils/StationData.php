@@ -14,6 +14,7 @@ function getNearestStations($latitude, $longitude, $station_list, $distance) {
         }
     }
     if (count($list) === 0) {
+        array_push($list, array("指定範囲には駅がありませんでした。", "範囲".$distance, 0 ));
         error_log("指定された範囲には、駅がありませんでした。");
     }
     return json_encode($list);
