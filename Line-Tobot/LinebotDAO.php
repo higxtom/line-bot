@@ -46,6 +46,7 @@ class LinebotDAO
         } catch(PDOException $e) {
             error_log('Error has occurred on accesing database' . $e->getMessage());
         } 
+        error_log("RETURN:" . $result[0]);
         return $result[0];
     }
     
