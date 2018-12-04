@@ -15,7 +15,7 @@ function getNearestStations($latitude, $longitude, $station_list) {
             error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
             $prev_dist = $dist;
         }
-        error_log("<pre> : " . $prev_dist);
+//         error_log("<pre> : " . $prev_dist);
     }
     if ($nearest[2] === 0) {
         $nearest = array("少なくとも10km以内には駅がありませんでした。", "", 0, 0, 0 );
