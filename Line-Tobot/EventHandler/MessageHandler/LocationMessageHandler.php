@@ -33,6 +33,9 @@ class LocationMessageHandler implements EventHandler
         $latitude = $this->locationMessage->getLatitude();
         $longitude = $this->locationMessage->getLongitude();
         
+        $prev_cmd = $this->dao->findPrevCommandByUserId($this->locationMessage->getUserId());
+        error_log("Previous command is : " . $prev_cmd);
+        
         $owm_json = getWeatherForecast($latitude, $longitude);
         $owm_data = json_decode($owm_json, true);
         //error_log($owm_data);

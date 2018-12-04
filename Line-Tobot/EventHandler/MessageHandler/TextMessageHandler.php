@@ -1,4 +1,6 @@
 <?php
+require_once(dirname(__FILE__).'/../../LinebotDAO.php');
+
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
@@ -16,11 +18,13 @@ class TextMessageHandler implements EventHandler
     private $bot;
 //     private $logger;
     private $textMessage;
+    private $dao;
     
-    public function __construct($bot, TextMessage $textMessage)
+    public function __construct($bot, TextMessage $textMessage, LinebotDAO $dao)
     {
         $this->bot = $bot;
         $this->textMessage = $textMessage;
+        $this->dao = $dao;
     }
 
     public function handle()
@@ -29,6 +33,10 @@ class TextMessageHandler implements EventHandler
         $replyToken = $this->textMessage->getReplyToken();
 
         $userid = $this->textMessage->getUserId();
+
+        // save command to database with userId;
+        $this->dao->putReceivedCommand($userid, $text);
+        
         switch ($text) {
             case 'profile':
                 $this->sentProfile($replyToken, $userid);
