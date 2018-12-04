@@ -45,7 +45,8 @@ class LinebotDAO
             error_log("db access succeeded.");
         } catch(PDOException $e) {
             error_log('Error has occurred on accesing database' . $e->getMessage());
-        }   
+        } 
+        return $result[0];
     }
     
     // 駅データDBを緯度・経度から取得し、JSON形式で結果を返す。
