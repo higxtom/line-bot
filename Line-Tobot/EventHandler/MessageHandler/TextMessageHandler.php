@@ -62,6 +62,24 @@ class TextMessageHandler implements EventHandler
                 $messageTemplate = new TextMessageBuilder('Where are you?', $quickReply);
                 $this->bot->replyMessage($replyToken, $messageTemplate);break;
                 
+            case 'station':
+                $postback = new PostbackTemplateActionBuilder('location', 'action=loc&res=loc','I am here!');
+                $quickReply = new QuickReplyMessageBuilder([
+                    new QuickReplyButtonBuilder(new LocationTemplateActionBuilder('Location')),
+                    new QuickReplyButtonBuilder($postback),
+                ]);
+                $messageTemplate = new TextMessageBuilder('Where are you?', $quickReply);
+                $this->bot->replyMessage($replyToken, $messageTemplate);break;
+
+            case 'weather':
+                $postback = new PostbackTemplateActionBuilder('location', 'action=loc&res=loc','I am here!');
+                $quickReply = new QuickReplyMessageBuilder([
+                    new QuickReplyButtonBuilder(new LocationTemplateActionBuilder('Location')),
+                    new QuickReplyButtonBuilder($postback),
+                ]);
+                $messageTemplate = new TextMessageBuilder('Where are you?', $quickReply);
+                $this->bot->replyMessage($replyToken, $messageTemplate);break;
+                
             default:
                 error_log("Unsupported event." . $text);
                 
