@@ -58,7 +58,7 @@ foreach ($events as $event) {
         switch ($msgType) {
             case 'text':
                 $type = "Text";
-                $handler = new TextMessageHandler($bot, $event);
+                $handler = new TextMessageHandler($bot, $event, $dao);
                 $handler->handle();
                 break;
             case 'sticker':
