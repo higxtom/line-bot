@@ -46,7 +46,7 @@ class LocationMessageHandler implements EventHandler
             $rmsg = "The nearest station is " . $nearest[0] ."(" .$nearest[1] ."): " . number_format($nearest[4],0) ."m\\\n\\\n";
         }
         $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
-        $this->bot->replyessage($replyToken, new LocationMessageBuilder($nearest[0], "", $nearest[3], $nearest[4]));
+        $this->bot->replyMessage($replyToken, new LocationMessageBuilder($nearest[0], "", $nearest[3], $nearest[4]));
         
         // 500 -> 1000 -> 1500
         $stations = json_decode(getStationsInRange($latitude, $longitude, $candidates, 500), true);
