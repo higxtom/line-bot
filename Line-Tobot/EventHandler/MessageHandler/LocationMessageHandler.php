@@ -45,7 +45,7 @@ class LocationMessageHandler implements EventHandler
         } else {
             $rmsg = "The nearest station is " . $nearest[0] ."(" .$nearest[1] ."): " . number_format($nearest[4],0) ."m\\\n\\\n";
         }
-        $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
+//         $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
         $this->bot->replyMessage($replyToken, new LocationMessageBuilder($nearest[0], "", $nearest[3], $nearest[4]));
         
         // 500 -> 1000 -> 1500
@@ -56,15 +56,11 @@ class LocationMessageHandler implements EventHandler
             error_log(print_r($station, true));
             $rmsg .= $station[0] . "(" . $station[1] . "): " . number_format($station[2],0) . "m\\\n";
         }
-        $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
+//         $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
         
         $rmsg = "\\\nYou are at " . $owm_data['name'] . ", and the weather focast is " . $owm_data['weather'][0]['main'] . '(' . $owm_data['weather'][0]['description'] . ')';
         error_log($rmsg);
         
-        $this->bot->replyMessage(
-            $replyToken,
-            new TextMessageBuilder($rmsg)
-//             new LocationMessageBuilder($title, $address, $latitude, $longitude)
-        );
+//         $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
     }
 }
