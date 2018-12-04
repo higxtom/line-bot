@@ -10,8 +10,11 @@ function getNearestStations($latitude, $longitude, $station_list, $distance) {
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
         if ($dist < $distance) {
             array_push($list, array($station->station_name, $station->line_name, $dist));
-            error_log($station->station_name . " : " . number_format($dist, 3));
+            error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
         }
+    }
+    if (count($list)) {
+        error_log("指定された範囲には、駅がありませんでした。");
     }
     return json_encode($list);
 }
@@ -31,7 +34,7 @@ function calcDistance($lat1, $lon1, $lat2, $lon2) {
     
     // 2点間の距離は、２点間の、緯度の差の２乗と経度の差の２乗を足した数値の平方根（３平方の定理より）
     $distance = sqrt( pow($dist_1d_lat * ($lat1 - $lat2), 2) + pow($dist_1d_lon * ($lon1 - $lon2), 2) );
-    error_log("DISTANCE: " . $distance);
+//     error_log("DISTANCE: " . $distance);
     
     return $distance;
 }
