@@ -9,11 +9,13 @@ function getNearestStations($latitude, $longitude, $station_list) {
     foreach ($stations as $station) {
         $prev_dist = 10000; // 10000m = 10km
         $dist = calcDistance($latitude, $longitude, $station->latitude, $station->longitude);
+        error_log(number_format($prev_dist,0) . " <-> " . number_format($dist));
         if ($dist < $prev_dist) {
             $station = array($station->station_name, $station->line_name, $dist);
             error_log($station->station_name . "(" . $station->line_name . "): " . number_format($dist, 3));
             $prev_dist = $dist;
         }
+        error_log("<pre> : " . $prev_dist);
     }
     if ($staion[2] === 0) {
         $station = array("少なくとも10km以内には駅がありませんでした。", "", 0 );
