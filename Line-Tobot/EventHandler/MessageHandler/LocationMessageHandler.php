@@ -3,6 +3,7 @@
 require_once dirname(__FILE__).'/../../LinebotDAO.php';
 require_once dirname(__FILE__).'/../../utils/OpenWeather.php';
 require_once dirname(__FILE__).'/../../utils/StationData.php';
+require_once dirname(__FILE__).'/../../utils/GooglePlaces.php';
 
 use LINE\LINEBot\Event\MessageEvent\LocationMessage;
 use LINE\LINEBot\MessageBuilder\LocationMessageBuilder;

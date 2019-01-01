@@ -2,7 +2,7 @@
 
 function findStoreByGooglePlaces($latitude, $longitude, $types, $name = null, $radius = null)
 {
-    $API_Key = 'AIzaSyDeT0JbxhZAvmJogmsbSc6yK5EGUloaqcE';
+    $API_Key = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
     $API_Url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
 
     $Request = $API_Url;
