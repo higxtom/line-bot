@@ -39,6 +39,9 @@ class LocationMessageHandler implements EventHandler
 
         switch ($prev_cmd) {
             case 'bar':
+                $gplc_json = findStoreByGooglePlaces($latitude, $longitude, 'food', 'bar', 500);
+                $gplc_data = json_decode($gplc_json, true);
+                error_log($gplc_json);
                 $this->bot->replyMessage($replyToken, new TextMessageBuilder("I will find bars that are near your place.:$address"));
                 break;
             case 'weather':
