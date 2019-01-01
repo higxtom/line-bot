@@ -10,7 +10,7 @@ function findStoreByGooglePlaces($latitude, $longitude, $types, $name = null, $r
         // error
     }
 
-    $Request .= "&key=$API_Key&location=$latitude,$logitude&types=$types";
+    $Request .= "&key=$API_Key&location=$latitude,$longitude&types=$types";
     if ($name != null) {
         $Request .= "&name=$name";
     }
