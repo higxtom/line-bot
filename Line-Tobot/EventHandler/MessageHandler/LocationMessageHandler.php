@@ -45,7 +45,7 @@ class LocationMessageHandler implements EventHandler
                 //error_log($gplc_json);
                 $replyMsg = 'Stores near your place are ...';
                 foreach ($gplc_data['results'] as $result) {
-                    $replyMsg .= ','.$result['name'].'('.$result['rating'].')'.$result['photos'][0]['html_attributions'][0];
+                    $replyMsg .= ','.$result['name'].'('.$result['rating'].')['.$result['place_id'].']';
                 }
                 $this->bot->replyMessage($replyToken, new TextMessageBuilder($replyMsg));
                 break;
