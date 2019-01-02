@@ -43,7 +43,11 @@ class LocationMessageHandler implements EventHandler
                 $gplc_json = findStoreByGooglePlaces($latitude, $longitude, 'food', 'bar', 500);
                 $gplc_data = json_decode($gplc_json, true);
                 error_log($gplc_json);
-                $this->bot->replyMessage($replyToken, new TextMessageBuilder("I will find bars that are near your place.:$address"));
+                $replyMsg = 'Stores near your place are ...';
+                foreach ($gplc_data['result'] as $result) {
+                    $replyMsg .= ','.$result['name'].'('.$result['rating'].')';
+                }
+                $this->bot->replyMessage($replyToken, new TextMessageBuilder($replyMsg));
                 break;
             case 'weather':
                 $owm_json = getWeatherForecast($latitude, $longitude);
