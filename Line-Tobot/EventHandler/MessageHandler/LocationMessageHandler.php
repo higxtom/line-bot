@@ -42,10 +42,10 @@ class LocationMessageHandler implements EventHandler
             case 'bar':
                 $gplc_json = findStoreByGooglePlaces($latitude, $longitude, 'food', 'bar', 500);
                 $gplc_data = json_decode($gplc_json, true);
-                error_log($gplc_json);
+                //error_log($gplc_json);
                 $replyMsg = 'Stores near your place are ...';
-                foreach ($gplc_data['result'] as $result) {
-                    $replyMsg .= ','.$result['name'].'('.$result['rating'].')';
+                foreach ($gplc_data['results'] as $result) {
+                    $replyMsg .= ','.$result['name'].'('.$result['rating'].')'.$result['photos'][0]['html_attributions'][0];
                 }
                 $this->bot->replyMessage($replyToken, new TextMessageBuilder($replyMsg));
                 break;
@@ -54,7 +54,6 @@ class LocationMessageHandler implements EventHandler
                 $owm_data = json_decode($owm_json, true);
                 //error_log($owm_data);
                 $rmsg = 'You are at '.$owm_data['name'].', and the weather focast is '.$owm_data['weather'][0]['main'].'('.$owm_data['weather'][0]['description'].')';
-//                 error_log($rmsg);
                 $this->bot->replyMessage($replyToken, new TextMessageBuilder($rmsg));
                 break;
             case 'station':
